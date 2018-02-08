@@ -6,11 +6,36 @@ const router = express.Router();
 const Anuncio = require("../../models/Anuncio");
 
 router.get("/", async (req, res, next) => {
-  const docs = await Anuncio.find().exec();
-  res.json({ success: true, result: docs });
+  try {
+    const docs = await Anuncio.find().exec();
+    console.log(docs.length);
+    res.json({ success: true, result: docs });
+  } catch (err) {
+    next(err);
+    return;
+  }
 });
 
-router.post("/", (req, res, next) => {
+router.get("/:page", function(req, res, next) {
+  var perPage = 10;
+  var page = req.params.page || 1;
+
+  Anuncio.find({})
+    .skip(perPage * page - perPage)
+    .limit(perPage)
+    .exec(function(err, anuncios) {
+      Anuncio.count().exec(function(err, count) {
+        if (err) return next(err);
+        res.render("index", {
+          anuncios: anuncios,
+          current: page,
+          pages: Math.ceil(count / perPage)
+        });
+      });
+    });
+});
+
+router.post("/", async (req, res, next) => {
   console.log(req.body);
 
   const data = req.body;
@@ -18,14 +43,16 @@ router.post("/", (req, res, next) => {
   // creamos documento de agente en memoria
   const anuncio = new Anuncio(data);
 
-  // lo persistimos en la base de datos
-  anuncio.save((err, anuncioGuardado) => {
-    if (err) {
-      next(err);
-      return;
+  try {
+    const docs = await anuncio.save();
+    res.json({ success: true, result: docs });
+  } catch (err) {
+    if (err.name === "MongoError" && err.code === 11000) {
+      res.status(409).send(new MyError("Duplicate key", [err.message]));
     }
-    res.json({ success: true, result: anuncioGuardado });
-  });
+
+    res.status(500).send(err);
+  }
 });
 
 module.exports = router;
