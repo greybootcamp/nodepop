@@ -28,7 +28,7 @@ router.get("/", async (req, res, next) => {
     const filter = {};
 
     if (typeof name !== "undefined") {
-      filter.name = { $regex: name };
+      filter.name = { $regex: name, '$options' : 'i' };
     }
 
     if (typeof price !== "undefined") {
@@ -59,7 +59,8 @@ router.get("/", async (req, res, next) => {
     }
 
     if (typeof tags !== "undefined") {
-      filter.tags = { $in: tags.split(",") };
+      const regex = tags.split(",").join("|");
+      filter.tags = { "$regex": regex, "$options": "i" };
     }
 
     const docs = await Anuncio.list(filter, skip, limit, sort, fields);
