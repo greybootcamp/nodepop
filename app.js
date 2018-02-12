@@ -24,9 +24,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/scripts", express.static(__dirname + "/public/js"));
+app.use("/css", express.static(__dirname + "/public/stylesheets"));
 
 app.use("/", require("./routes/index"));
-app.use("/users", require("./routes/users"));
 
 /**
  * Middlewares de mi api

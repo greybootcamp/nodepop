@@ -17,9 +17,10 @@ router.get("/", async (req, res, next) => {
     const price = req.query.price;
     const selling = req.query.selling;
     const tags = req.query.tags;
+    const page = parseInt(req.query.page) || 1;
 
-    const skip = parseInt(req.query.skip) || 0;
     const limit = parseInt(req.query.limit);
+    const skip = limit * page - limit;
     const sort = req.query.sort;
     const fields = req.query.fields;
 
@@ -28,7 +29,7 @@ router.get("/", async (req, res, next) => {
     const filter = {};
 
     if (typeof name !== "undefined") {
-      filter.name = { $regex: name, '$options' : 'i' };
+      filter.name = { $regex: name, $options: "i" };
     }
 
     if (typeof price !== "undefined") {
@@ -60,7 +61,7 @@ router.get("/", async (req, res, next) => {
 
     if (typeof tags !== "undefined") {
       const regex = tags.split(",").join("|");
-      filter.tags = { "$regex": regex, "$options": "i" };
+      filter.tags = { $regex: regex, $options: "i" };
     }
 
     const docs = await Anuncio.list(filter, skip, limit, sort, fields);
