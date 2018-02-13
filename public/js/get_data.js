@@ -12,19 +12,19 @@ $(document).ready(function() {
   var drawTasks = function() {
     tasksContainer.empty();
 
-    if (anuncios.length == 0) {
+    if (anuncios.result.length == 0) {
       tasksContainer.append(
         '<li class="task-item">No tienes tareas pendientes</li>'
       );
     } else {
       var contentToAdd = "";
 
-      for (var i = 0; i < anuncios.length; i++) {
+      for (var i = 0; i < anuncios.result.length; i++) {
         contentToAdd +=
           '<li class="task-item"><input type="text" class="update-task-input" value="' +
-          anuncios[i].result.name +
+          anuncios.result[i].name +
           '" required><button class="deleteTask" data-task-id="' +
-          anuncios[i].result._id +
+          anuncios.result[i]._id +
           '">Eliminar</button></li>';
       }
 
@@ -59,7 +59,7 @@ $(document).ready(function() {
 
   var getTasks = function() {
     var success = function(data) {
-      tasks = data;
+      anuncios = data;
       drawTasks();
     };
 
@@ -134,6 +134,10 @@ $(document).ready(function() {
         console.error("Error actualizando tarea", error);
       });
   };
+
+  $(document).ready(function() {
+    getTasks();
+  });
 
   $("#sendNewTask").on("click", function(event) {
     if (newTaskInput.val() != "") {
