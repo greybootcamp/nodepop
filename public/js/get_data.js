@@ -20,12 +20,29 @@ $(document).ready(function() {
       var contentToAdd = "";
 
       for (var i = 0; i < anuncios.result.length; i++) {
-        contentToAdd +=
-          '<li class="task-item"><input type="text" class="update-task-input" value="' +
-          anuncios.result[i].name +
-          '" required><button class="deleteTask" data-task-id="' +
-          anuncios.result[i]._id +
-          '">Eliminar</button></li>';
+        let selling = anuncios.result[i].selling ? "On Sale!!!" : "To Rent!!!";
+
+        contentToAdd += `<div class="items-rows">
+            <div class="col-md-4 list-item">
+              <div class="thumbnail">
+                <img src=${anuncios.result[i].photo}>
+                <div class="caption">
+                  <h3>
+                    ${anuncios.result[i].name}
+                  </h3>
+                  <p>
+                    ${selling}
+                  </p>
+                  <p>$
+                    ${anuncios.result[i].price}
+                  </p>
+                  <p>
+                    ${anuncios.result[i].tags}
+                  </p>
+                </div>
+              </div>
+            </div>
+        </div>`;
       }
 
       tasksContainer.append(contentToAdd);
@@ -42,8 +59,10 @@ $(document).ready(function() {
     };
 
     var success = function(data) {
-      newTaskInput.val("");
       anuncios.push(data);
+      $(":input")
+        .not(":button, :submit, :reset, :hidden, :checkbox, :radio")
+        .val("");
       drawTasks();
     };
 
@@ -57,7 +76,7 @@ $(document).ready(function() {
     });
   };
 
-  var getTasks = function() {
+  var getTasks = function(name, price, tags) {
     var success = function(data) {
       anuncios = data;
       drawTasks();
@@ -83,7 +102,7 @@ $(document).ready(function() {
 
     $.ajax({
       type: "GET",
-      url: API_URL + "anuncios",
+      url: `${API_URL}anuncios?page=2&limit=5&name=${name}`,
       success: success,
       error: error,
       complete: complete,
@@ -137,6 +156,16 @@ $(document).ready(function() {
 
   $(document).ready(function() {
     getTasks();
+  });
+
+  $(".list-filters input").keyup(function() {
+    var filters = {
+      name: $("#filter-name").val(),
+      price: $("#filter-price").val(),
+      tags: $("#filter-tags").val()
+    };
+
+    getTasks(filters.name, filters.price, filters.tags);
   });
 
   $("#sendNewTask").on("click", function(event) {

@@ -43,9 +43,7 @@
 }
 
 .col-6 {
-  width: 50%;
-  float: left;
-  display: inline-block;
+  width: 100%;
 }
 
 .col-7 {

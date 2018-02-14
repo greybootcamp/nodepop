@@ -32,7 +32,7 @@ router.get("/", async (req, res, next) => {
       filter.name = { $regex: name, $options: "i" };
     }
 
-    if (typeof price !== "undefined") {
+    if (typeof price !== "undefined" && price !== "") {
       const parsedPrice = price.split("-");
 
       if (parsedPrice.length === 1) {
