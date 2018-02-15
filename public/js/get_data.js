@@ -102,7 +102,7 @@ $(document).ready(function() {
 
     $.ajax({
       type: "GET",
-      url: `${API_URL}anuncios?page=2&limit=5&name=${name}`,
+      url: `${API_URL}anuncios?limit=5&name=${name}`,
       success: success,
       error: error,
       complete: complete,
@@ -155,7 +155,7 @@ $(document).ready(function() {
   };
 
   $(document).ready(function() {
-    getTasks();
+    getTasks("","","");
   });
 
   $(".list-filters input").keyup(function() {
@@ -197,8 +197,4 @@ $(document).ready(function() {
   $(document).dblclick(function(event) {
     console.log("Has puslado la tecla " + event.which);
   });
-
-  setTimeout(function() {
-    getTasks();
-  }, 1);
 });
