@@ -20,7 +20,7 @@ var getItems = function (name, price, tags) {
   })
 }
 
-var createTask = function (name, price, selling, tags, photo) {
+var createItem = function (name, price, selling, tags, photo) {
   var data = {
     name: name,
     selling: selling,
@@ -47,7 +47,7 @@ var createTask = function (name, price, selling, tags, photo) {
   });
 };
 
-var deleteTask = function (id) {
+var deleteItem = function (id) {
   $.ajax({
     type: "DELETE",
     url: API_URL + "tasks/" + id
@@ -67,7 +67,7 @@ var deleteTask = function (id) {
     });
 };
 
-var updateTask = function (id, name) {
+var updateItem = function (id, name) {
   var data = {
     name: name
   };

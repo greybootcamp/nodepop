@@ -43,6 +43,17 @@ $("#sendNewTask").on("click", function (event) {
     }
 });
 
+$("a#paginationItem").on("click", function(event){
+    var filters = {
+        name: $("#filter-name").val(),
+        price: $("#filter-price").val(),
+        tags: $("#filter-tags").val(),
+        page: event.target.value
+    };
+
+    getItems(filters.name, filters.price, filters.tags, page);
+});
+
 $(document).on("click", ".deleteTask", function (event) {
     var id = $(this).data("taskId");
     deleteTask(id);
