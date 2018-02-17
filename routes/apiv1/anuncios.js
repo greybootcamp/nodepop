@@ -20,7 +20,7 @@ router.get("/", async (req, res, next) => {
     const page = parseInt(req.query.page) || 1;
 
     const limit = parseInt(req.query.limit) || 0;
-    const skip = limit * page - limit;
+    const skip = (page - 1) * limit;
     const sort = req.query.sort;
     const fields = req.query.fields;
 
@@ -66,13 +66,17 @@ router.get("/", async (req, res, next) => {
 
     const docs = await Anuncio.list(filter, skip, limit, sort, fields);
 
-    res.json({ success: true, result: docs, pages: (pages) => {
-      if (isNaN(limit) || limit == 0){
-        return 1;
-      }else{
-        return Math.round(docs.length / limit);
+    res.json({
+      success: true,
+      result: docs,
+      pages: pages => {
+        if (isNaN(limit) || limit == 0) {
+          return 1;
+        } else {
+          return Math.round(docs.length / limit);
+        }
       }
-    } });
+    });
   } catch (err) {
     next(err);
     return;

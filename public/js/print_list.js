@@ -32,8 +32,7 @@ $(document).on("keyup", ".list-filters input", function() {
   var filters = {
     name: $("#filter-name").val(),
     price: $("#filter-price").val(),
-    tags: $("#filter-tags").val(),
-    page: event.currentTarget.text
+    tags: $("#filter-tags").val()
   };
 
   var result = getItems(filters.name, filters.price, filters.tags)
@@ -81,19 +80,6 @@ $(document).on("click", "a#paginationItem", function(event) {
     });
 });
 
-$(document).on("click", ".deleteTask", function(event) {
-  var id = $(this).data("taskId");
-  deleteTask(id);
-});
-
-$(document).on("blur", ".update-task-input", function(event) {
-  var newName = $(this).val();
-  var id = $(this)
-    .siblings(".deleteTask")
-    .data("taskId");
-  updateTask(id, newName);
-});
-
 var drawTasks = function(data) {
   var anuncios = data;
   tasksContainer.empty();
@@ -134,6 +120,7 @@ var drawTasks = function(data) {
                 <p>$
                 ${anuncios.result[i].price}
                 </p>
+                <p>TAGS:</p>
                 <p>
                 ${anuncios.result[i].tags}
                 </p>
