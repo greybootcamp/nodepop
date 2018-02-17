@@ -6,10 +6,16 @@ const router = express.Router();
 const Anuncio = require("../../models/Anuncio");
 
 /**
- * @api {get} /anuncios Request list of agents
+ * @api {get} /anuncios Request list of all items
  *
- * @apiSuccess {String} firstname Firstname of the User.
- * @apiSuccess {String} lastname  Lastname of the User.
+ * @apiSuccess optional {String} name Product Name
+ * @apiSuccess optional {Integer} price Filter by Price (50, 50-50, -50, 50-)
+ * @apiSuccess optional {Boolean} selling True if it's selling otherwise it's renting
+ * @apiSuccess optional {String} tags A comma separated list of strings contained in tags
+ * @apiSuccess optional {Integer} page The page number to be retrieved
+ * @apiSuccess optional {Integer} limit Limit results to that number
+ * @apiSuccess optional {String} sort Sort by this field, i.e: price or -price to reverse
+ * @apiSuccess optional {Fields} fields What fields to be included at results
  */
 router.get("/", async (req, res, next) => {
   try {
@@ -84,10 +90,13 @@ router.get("/", async (req, res, next) => {
 });
 
 /**
- * @api {post} /add_anuncio Request list of agents
+ * @api {post} / Create new items
  *
- * @apiSuccess {String} firstname Firstname of the User.
- * @apiSuccess {String} lastname  Lastname of the User.
+ * @apiSuccess optional {String} name Product Name
+ * @apiSuccess optional {Integer} price The price
+ * @apiSuccess optional {Boolean} selling True if it's selling otherwise it's renting
+ * @apiSuccess optional {String} tags A comma separated list of strings
+ * @apiSuccess optional {Integer} photo the file name stored in DB
  */
 router.post("/", (req, res, next) => {
   console.log(req.body);
@@ -108,10 +117,9 @@ router.post("/", (req, res, next) => {
 });
 
 /**
- * @api {delete} /:id Request list of agents
+ * @api {delete} /:id Remove items from DB
  *
- * @apiSuccess {String} firstname Firstname of the User.
- * @apiSuccess {String} lastname  Lastname of the User.
+ * @apiSuccess {String} id The item's ID as it's stored in DB
  */
 router.delete("/:id", async (req, res, next) => {
   try {
@@ -125,10 +133,9 @@ router.delete("/:id", async (req, res, next) => {
 });
 
 /**
- * @api {put} /:id Request list of agents
+ * @api {put} /:id Update an item at DB
  *
- * @apiSuccess {String} firstname Firstname of the User.
- * @apiSuccess {String} lastname  Lastname of the User.
+ * @apiSuccess {String} id The item's ID as it's stored in DB
  */
 router.put("/:id", async (req, res, next) => {
   try {
