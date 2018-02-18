@@ -1,6 +1,6 @@
 axios.interceptors.request.use(
   config => {
-    config.baseURL = "http://localhost:3000/apiv1/";
+    config.baseURL = "http://localhost:3000/apiv1/anuncios";
 
     return config;
   },
@@ -9,10 +9,8 @@ axios.interceptors.request.use(
   }
 );
 
-axios.defaults.baseURL = "http://localhost:3000/apiv1/";
-
 var getItems = function(name, price, tags, pageNumber) {
-  return axios.get("anuncios?limit=10", {
+  return axios.get("?limit=10", {
     before: e => {
       loader.show();
     },
@@ -26,14 +24,11 @@ var getItems = function(name, price, tags, pageNumber) {
 };
 
 var createItem = function(name, price, selling, tags, photo) {
-  return axios({
-    method: "post",
-    data: {
-      name: name,
-      selling: selling,
-      price: parseInt(price),
-      photo: photo,
-      tags: tags
-    }
+  return axios.post("", {
+    name: name,
+    selling: selling,
+    price: parseInt(price),
+    photo: photo,
+    tags: tags
   });
 };

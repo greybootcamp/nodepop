@@ -1,31 +1,24 @@
-"use strict";
+require("../lib/connectMongoose");
+const fs = require("fs");
 
-const mongoose = require("mongoose");
-const conn = mongoose.connection;
 const Anuncio = require("../models/Anuncio");
+const json = JSON.parse(
+  fs.readFileSync(__dirname + "/MOCK_DATA.json", "utf-8")
+);
 
-const anuncios = require("./MOCK_DATA.json");
+populateData(json).catch(err => console.log(err));
 
-conn.once("open", async () => {
-  console.log("MongoDB Already Connected...", mongoose.connection.name);
-  // Drop any existing data
-  await mongoose.connection.db.dropDatabase(function(err, result) {
-    if (err) {
-      console.log(err);
-    }
-    console.log("DataBase already dropped!!!");
-  });
+async function populateData(anuncios) {
+  try {
+    await Anuncio.remove();
+    console.log("Deleting all data.");
 
-  // Go through each anuncio
-  anuncios.map(async data => {
-    // Initialize a model with anuncios data
-    const anuncio = new Anuncio(data);
-    // and save it into the database
-    await anuncio.save();
-    console.log("Data Saved!!");
-    mongoose.connection.close();
-  });
-});
+    await Anuncio.insertMany(anuncios);
 
-// Connect to MongoDB
-mongoose.connect("mongodb://localhost/nodepop");
+    console.log("Data already populated into collection!!");
+    process.exit();
+  } catch (e) {
+    console.log(e);
+    process.exit();
+  }
+}

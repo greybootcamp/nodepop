@@ -1,5 +1,5 @@
 var loader;
-var newTaskInput;
+var newTaskName;
 var price;
 var selling;
 var tags;
@@ -9,11 +9,12 @@ var paginationContainer;
 var paginationItems;
 
 $(document).ready(function() {
-  var loader = $(".loader");
-  var price = $("#price");
-  var selling = $("#selling");
-  var tags = $("#tags");
-  var photo = $("#photo");
+  loader = $(".loader");
+  newTaskName = $("#newTaskName");
+  price = $("#price");
+  selling = $("#selling");
+  tags = $("#tags");
+  photo = $("#photo");
   tasksContainer = $("#tasksContainer");
   paginationContainer = $("#pagination");
   paginationItems = $("a#paginationItem");
@@ -44,23 +45,29 @@ $(document).on("keyup", ".list-filters input", function() {
     });
 });
 
-$(document).on("click", "#sendNewTask", function(event) {
-  var newTaskInput = $("#newTaskName");
+$(function() {
+  $("#sendNewTask").click(function(e) {
+    e.preventDefault();
+    $("#addItems").modal("hide");
 
-  var result = createItem(
-    newTaskInput.val(),
-    price.val(),
-    selling.val(),
-    tags.val(),
-    photo.val()
-  )
-    .then(function(response) {
-      alert("task created: " + response.data);
-      drawTasks(response.data);
-    })
-    .catch(function(error) {
-      console.log(error);
-    });
+    var result = createItem(
+      newTaskName.val(),
+      price.val(),
+      selling.val(),
+      tags.val(),
+      photo.val()
+    )
+      .then(function(response) {
+        console.log("Item created with ID: " + response.data.result._id);
+        return getItems(response.data.result.name, "", "");
+      })
+      .then(function(response) {
+        drawTasks(response.data);
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+  });
 });
 
 $(document).on("click", "a#paginationItem", function(event) {
