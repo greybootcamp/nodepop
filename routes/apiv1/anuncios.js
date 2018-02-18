@@ -74,14 +74,7 @@ router.get("/", async (req, res, next) => {
 
     res.json({
       success: true,
-      result: docs,
-      pages: pages => {
-        if (isNaN(limit) || limit == 0) {
-          return 1;
-        } else {
-          return Math.round(docs.length / limit);
-        }
-      }
+      result: docs
     });
   } catch (err) {
     next(err);
