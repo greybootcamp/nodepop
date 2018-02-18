@@ -4,7 +4,7 @@
 
 This a backend Node.js App that contains 2 different endpoint in order to retrieve the list of Anuncios. This App can be started in dev or production environment, when in Dev mode it runs a local MongoDB with testing data. When in production it takes the data from a MLab MongoDB instance.
 
-## How to execute the app in dev mode
+## How to execute the app in dev mode
 
 This App contains some scripts (See package.json file) that allows the user to drop the local DB and create a new one by creating new test data on the Anuncios collection. The imported data is stored in a json file at folder `/bin/MOCK_DATA.json`.
 
@@ -22,7 +22,7 @@ If it's successfuly started, go to a browser or use any client to make request t
 
 This will return a json object with the list of elements in our collection.
 
-## How to execute the app in production mode
+## How to execute the app in production mode
 
 The command is as next:
 
@@ -30,13 +30,13 @@ The command is as next:
 
 This will start the Application pointing the DB to production. It means no data is gonna be stored in our local Mongo Instance.
 
-\_Note:\_If you look at the `package.json` the only difference between this run and the dev one is an environment var, when mongoose si trying to connect it first will check if this environment var is set to "dev", if so points to local Mongo otherwise it goes to production.
+**Note:** If you look at the `package.json` the only difference between this run and the dev one is an environment var, when mongoose si trying to connect it first will check if this environment var is set to "dev", if so points to local Mongo otherwise it goes to production.
 
-## Endpoints and parameters
+## Endpoints and parameters
 
 This API v1 has next supported endpoints:
 
-## GET
+## GET
 
 `GET /apiv1/anuncios` This endpoint supports next parameters:
 
@@ -55,7 +55,7 @@ This API v1 has next supported endpoints:
 * `sort`: Field to sort at
 * `fields`: What fields to be shown at result, if not passed then all are shown
 
-### Endpoint request example
+### Endpoint request example
 
 GET all the results with a name containing this string:
 
@@ -69,15 +69,15 @@ GET all products that contains any of these strings at tags field:
 
 `http://localhost:3000/apiv1/anuncios?tags=tag1,tag2`
 
-## POST
+## POST
 
 It's posible to create products by sending a POST to our app and pathing next parameters:
 
 `http://localhost:3000/apiv1/anuncios?selling=true&name=new_product&tags=tag1,tag2&price=756&photo=pic.jpg`
 
-_Note:_ It accepts the same parameters as in GET request but adding also a `photo` parameter which is a string containing the pictures file name stored in the application.
+**Note:** It accepts the same parameters as in GET request but adding also a `photo` parameter which is a string containing the pictures file name stored in the application.
 
-## PUT & DELETE
+## PUT & DELETE
 
 Products can be updated or deleted by sending a PUT or DELETE request and providing the correspondent product ID at the url as a parameter:
 
