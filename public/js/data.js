@@ -9,8 +9,8 @@ axios.interceptors.request.use(
   }
 );
 
-var getItems = function(name, price, tags, pageNumber) {
-  return axios.get("?limit=10", {
+var getItems = function(name, price, tags, pageNumber, limit) {
+  return axios.get("", {
     before: e => {
       loader.show();
     },
@@ -18,7 +18,8 @@ var getItems = function(name, price, tags, pageNumber) {
       name: name,
       price: price,
       tags: tags,
-      page: pageNumber
+      page: pageNumber,
+      limit: limit
     }
   });
 };

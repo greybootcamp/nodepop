@@ -70,12 +70,22 @@ router.get("/", async (req, res, next) => {
       filter.tags = { $regex: regex, $options: "i" };
     }
 
-    const docs = await Anuncio.list(filter, skip, limit, sort, fields);
-
-    res.json({
-      success: true,
-      result: docs
-    });
+    const docs = await Anuncio.list(
+      filter,
+      page,
+      skip,
+      limit,
+      sort,
+      fields,
+      result => {
+        console.log(result);
+        res.json({
+          success: true,
+          result: result.products,
+          pages: result.pages
+        });
+      }
+    );
   } catch (err) {
     next(err);
     return;

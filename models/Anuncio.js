@@ -12,6 +12,7 @@ var anuncioSchema = mongoose.Schema({
 
 anuncioSchema.statics.list = function(
   filter,
+  page,
   skip,
   limit,
   sort,
@@ -23,7 +24,16 @@ anuncioSchema.statics.list = function(
   query.limit(limit);
   query.sort(sort);
   query.select(fields);
-  return query.exec(callback);
+  return query.exec(function(err, items) {
+    Anuncio.count(filter).exec(function(err, count) {
+      if (err) return next(err);
+      callback({
+        products: items,
+        current: page,
+        pages: Math.ceil(count / limit)
+      });
+    });
+  });
 };
 
 const Anuncio = mongoose.model("Anuncio", anuncioSchema);

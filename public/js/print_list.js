@@ -7,6 +7,9 @@ var photo;
 var tasksContainer;
 var paginationContainer;
 var paginationItems;
+var itemsPerPage = function() {
+  return parseInt($("select option:selected").text());
+};
 
 $(document).ready(function() {
   loader = $(".loader");
@@ -19,10 +22,10 @@ $(document).ready(function() {
   paginationContainer = $("#pagination");
   paginationItems = $("a#paginationItem");
 
-  var result = getItems("", "", "")
+  var result = getItems("", "", "", 1, itemsPerPage())
     .then(function(response) {
       loader.fadeOut();
-      drawTasks(response.data);
+      drawTasks(response.data, response.data.pages);
     })
     .catch(function(error) {
       console.log(error);
@@ -36,9 +39,15 @@ $(document).on("keyup", ".list-filters input", function() {
     tags: $("#filter-tags").val()
   };
 
-  var result = getItems(filters.name, filters.price, filters.tags)
+  var result = getItems(
+    filters.name,
+    filters.price,
+    filters.tags,
+    "",
+    itemsPerPage()
+  )
     .then(function(response) {
-      drawTasks(response.data);
+      drawTasks(response.data, response.data.pages);
     })
     .catch(function(error) {
       console.log(error);
@@ -59,10 +68,10 @@ $(function() {
     )
       .then(function(response) {
         console.log("Item created with ID: " + response.data.result._id);
-        return getItems(response.data.result.name, "", "");
+        return getItems(response.data.result.name, "", "", "", itemsPerPage());
       })
       .then(function(response) {
-        drawTasks(response.data);
+        drawTasks(response.data, response.data.pages);
       })
       .catch(function(error) {
         console.log(error);
@@ -75,19 +84,50 @@ $(document).on("click", "a#paginationItem", function(event) {
     name: $("#filter-name").val(),
     price: $("#filter-price").val(),
     tags: $("#filter-tags").val(),
-    page: event.currentTarget.text
+    page: event.currentTarget.text,
+    limit: itemsPerPage()
   };
 
-  var result = getItems(filters.name, filters.price, filters.tags, filters.page)
+  var result = getItems(
+    filters.name,
+    filters.price,
+    filters.tags,
+    filters.page,
+    filters.limit
+  )
     .then(function(response) {
-      drawTasks(response.data);
+      drawTasks(response.data, response.data.pages);
     })
     .catch(function(error) {
       console.log(error);
     });
 });
 
-var drawTasks = function(data) {
+$("select").change(function() {
+  var filters = {
+    name: $("#filter-name").val(),
+    price: $("#filter-price").val(),
+    tags: $("#filter-tags").val(),
+    page: "",
+    limit: parseInt($("select option:selected").text())
+  };
+
+  var result = getItems(
+    filters.name,
+    filters.price,
+    filters.tags,
+    filters.page,
+    filters.limit
+  )
+    .then(function(response) {
+      drawTasks(response.data, response.data.pages);
+    })
+    .catch(function(error) {
+      console.log(error);
+    });
+});
+
+var drawTasks = function(data, pages) {
   var anuncios = data;
   tasksContainer.empty();
 
@@ -97,7 +137,6 @@ var drawTasks = function(data) {
     );
   } else {
     var contentToAdd = "";
-    var pages = anuncios.result.length / 5; // Fixed to 5 at the moment
     var paginationElements = "";
 
     if (paginationItems.length !== anuncios.result.length) {
@@ -138,5 +177,6 @@ var drawTasks = function(data) {
     }
 
     tasksContainer.append(contentToAdd);
+    console.log(tasksContainer);
   }
 };

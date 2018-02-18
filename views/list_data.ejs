@@ -33,15 +33,15 @@
                             <form>
                                 <div class="form-group col-8">
                                     <input class="form-control" type="text" id="newTaskName" name="name" placeholder="New name" required>
-                                    
+
                                     <input class="form-control" type="text" id="price" name="price" placeholder="Put a price..." required>
-                                    
+
                                     <input class="form-control" type="text" id="selling" name="selling" placeholder="Selling: true or false" required>
-                                    
+
                                     <input class="form-control" type="text" id="tags" name="tags" placeholder="tags, comma separated" required>
-                                    
+
                                     <input class="form-control" type="text" id="photo" name="photo" placeholder="photo name" required>
-                                    
+
                                     <button id="sendNewTask">Enviar</button>
                                 </div>
                             </form>
@@ -60,6 +60,12 @@
                     <input type="text" id="filter-price" placeholder="i.e: -50, 50-50, 50-">
                     <input type="text" id="filter-tags" placeholder="Tags contains...">
                 </div>
+                <span>Items Per Page:</span>
+                <select class="bootstrap-select" id="itemsPerPage">
+                    <option value="1" selected="selected">5</option>
+                    <option value="2">10</option>
+                    <option value="3">20</option>
+                </select>
                 <h3>Items</h3>
                 <ul class="pagination" id="pagination"></ul>
                 <div class="loader"></div>
@@ -68,7 +74,7 @@
         </section>
     </main>
 </body>
-<script src="scripts/print_list.js"></script>
-<script src="scripts/data.js"></script>
+<script src="scripts/print_list.js "></script>
+<script src="scripts/data.js "></script>
 
 </html>
